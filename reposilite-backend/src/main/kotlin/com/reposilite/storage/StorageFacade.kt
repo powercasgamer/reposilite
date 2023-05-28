@@ -29,6 +29,11 @@ class StorageFacade : Facade {
         .mapValues { (_, factory) -> factory as StorageProviderFactory<*, StorageProviderSettings> }
 
     fun createStorageProvider(failureFacade: FailureFacade, workingDirectory: Path, repository: String, storageSettings: StorageProviderSettings): StorageProvider? =
-        storageProviderFactories[storageSettings.type]?.create(failureFacade, workingDirectory, repository, storageSettings)
+        storageProviderFactories[storageSettings.type]?.create(
+            failureFacade,
+            workingDirectory,
+            repository,
+            storageSettings
+        )
 
 }

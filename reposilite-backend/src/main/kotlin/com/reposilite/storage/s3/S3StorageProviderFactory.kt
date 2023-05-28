@@ -20,11 +20,9 @@ import com.reposilite.status.FailureFacade
 import com.reposilite.storage.StorageProviderFactory
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
-import software.amazon.awssdk.core.exception.SdkClientException
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.S3Configuration
-import software.amazon.awssdk.services.s3.model.S3Exception
 import java.net.URI
 import java.nio.file.Path
 

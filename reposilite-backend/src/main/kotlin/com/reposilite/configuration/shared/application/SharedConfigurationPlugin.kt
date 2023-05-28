@@ -52,9 +52,13 @@ class SharedConfigurationPlugin : ReposilitePlugin() {
         val loadResult = sharedConfigurationFacade.loadSharedSettingsFromString(storedConfiguration)
 
         if (loadResult.isErr && !parameters().ignoreSharedConfigurationErrors) {
-            logger.error("Failed to load shared configuration from '${sharedConfigurationFacade.getProviderName()}' provider.")
+            logger.error(
+                "Failed to load shared configuration from '${sharedConfigurationFacade.getProviderName()}' provider."
+            )
             logger.error("Please check your configuration and try again.")
-            logger.error("If you want to ignore those errors and let Reposilite start with default settings as a fallback values,")
+            logger.error(
+                "If you want to ignore those errors and let Reposilite start with default settings as a fallback values,"
+            )
             logger.error("please launch Reposilite with --ignore-shared-configuration-errors' flag.")
             throw loadResult.error
         }
@@ -65,7 +69,9 @@ class SharedConfigurationPlugin : ReposilitePlugin() {
                     return@scheduleWithFixedDelay
                 }
 
-                logger.info("Propagation | Shared configuration has been changed in ${sharedConfigurationFacade.getProviderName()}, updating current instance...")
+                logger.info(
+                    "Propagation | Shared configuration has been changed in ${sharedConfigurationFacade.getProviderName()}, updating current instance..."
+                )
                 sharedConfigurationFacade.loadSharedSettingsFromString(sharedConfigurationFacade.fetchConfiguration())
                 logger.info("Propagation | Sources have been updated successfully")
             }, 10, 10, TimeUnit.SECONDS)

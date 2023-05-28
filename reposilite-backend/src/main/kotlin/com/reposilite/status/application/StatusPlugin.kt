@@ -95,7 +95,9 @@ internal class StatusPlugin : ReposilitePlugin() {
             Files.writeString(
                 localTmpDataDirectory.resolve("reposilite.address"),
                 "${parameters().hostname}:${parameters().port}",
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.SYNC
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING,
+                StandardOpenOption.SYNC
             )
         }
 
@@ -105,7 +107,5 @@ internal class StatusPlugin : ReposilitePlugin() {
 
         return statusFacade
     }
-
-
 
 }

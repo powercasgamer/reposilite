@@ -106,7 +106,9 @@ internal class CliEndpoint(
         val authMessage = connection.message()
 
         if (!authMessage.startsWith(AUTHORIZATION_PREFIX)) {
-            return unauthorizedError("Unauthorized CLI access request from ${address(connection)} (missing credentials)")
+            return unauthorizedError(
+                "Unauthorized CLI access request from ${address(connection)} (missing credentials)"
+            )
         }
 
         return extractFromString(authMessage.replaceFirst(AUTHORIZATION_PREFIX, ""))

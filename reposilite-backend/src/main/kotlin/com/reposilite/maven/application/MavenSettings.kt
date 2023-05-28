@@ -51,11 +51,20 @@ data class RepositorySettings(
     @get:Doc(title = "Storage provider", description = "The storage type of this repository.")
     @get:OneOf(FileSystemStorageProviderSettings::class, S3StorageProviderSettings::class)
     val storageProvider: StorageProviderSettings = FileSystemStorageProviderSettings(),
-    @get:Doc(title = "Redeployment", description = "Does this repository accept redeployment of the same artifact version.")
+    @get:Doc(
+        title = "Redeployment",
+        description = "Does this repository accept redeployment of the same artifact version."
+    )
     val redeployment: Boolean = false,
-    @get:Doc(title = "Preserved snapshots", "By default Reposilite deletes all deprecated build files. If you'd like to preserve them, set this property to true.")
+    @get:Doc(
+        title = "Preserved snapshots",
+        "By default Reposilite deletes all deprecated build files. If you'd like to preserve them, set this property to true."
+    )
     val preserveSnapshots: Boolean = false,
-    @get:Doc(title = "Mirrored repositories", description = "List of mirrored repositories associated with this repository.")
+    @get:Doc(
+        title = "Mirrored repositories",
+        description = "List of mirrored repositories associated with this repository."
+    )
     val proxied: List<MirroredRepositorySettings> = listOf()
 ) : SharedSettings
 
@@ -64,14 +73,26 @@ data class MirroredRepositorySettings(
     @Min(1)
     @get:Doc(title = "Link", description = "Either the id of other local repository or the URL of a remote repository.")
     val reference: String = "",
-    @get:Doc(title = "Store", description = "Reposilite can store proxied artifacts locally to reduce response time and improve stability.")
+    @get:Doc(
+        title = "Store",
+        description = "Reposilite can store proxied artifacts locally to reduce response time and improve stability."
+    )
     val store: Boolean = false,
-    @get:Doc(title = "Allowed Groups", description = "Allowed artifact groups. If none are given, all artifacts can be obtained from this mirror.")
+    @get:Doc(
+        title = "Allowed Groups",
+        description = "Allowed artifact groups. If none are given, all artifacts can be obtained from this mirror."
+    )
     val allowedGroups: List<String> = listOf(),
-    @get:Doc(title = "Allowed Extensions", description = "List of accepted file extensions. If none are given, all files can be obtained from this mirror.")
-    val allowedExtensions: List<String> = listOf(".jar", ".war", ".pom", ".xml",  ".md5", ".sha1", ".sha256", ".sha512", ".asc"),
+    @get:Doc(
+        title = "Allowed Extensions",
+        description = "List of accepted file extensions. If none are given, all files can be obtained from this mirror."
+    )
+    val allowedExtensions: List<String> = listOf(".jar", ".war", ".pom", ".xml", ".md5", ".sha1", ".sha256", ".sha512", ".asc"),
     @Min(0)
-    @get:Doc(title = "Connect Timeout", description = "How long Reposilite can wait for establishing the connection with a remote host. (In seconds)")
+    @get:Doc(
+        title = "Connect Timeout",
+        description = "How long Reposilite can wait for establishing the connection with a remote host. (In seconds)"
+    )
     val connectTimeout: Int = 3,
     @Min(0)
     @get:Doc(title = "Read Timeout", description = "How long Reposilite can read data from remote proxy. (In seconds)")
@@ -95,6 +116,9 @@ data class MirrorCredentials(
     override val method: AuthenticationMethod = AuthenticationMethod.BASIC,
     @get:Doc(title = "Login", description = "Login or custom header name to use")
     override val login: String = "",
-    @get:Doc(title = "Password", description = "Raw password or header value used by HTTP client to connect to the given repository")
+    @get:Doc(
+        title = "Password",
+        description = "Raw password or header value used by HTTP client to connect to the given repository"
+    )
     override val password: String = ""
 ) : SharedSettings, RemoteCredentials

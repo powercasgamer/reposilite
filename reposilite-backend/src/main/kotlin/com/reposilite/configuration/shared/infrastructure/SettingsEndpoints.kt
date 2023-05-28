@@ -22,7 +22,6 @@ import com.reposilite.shared.badRequest
 import com.reposilite.shared.badRequestError
 import com.reposilite.web.api.ReposiliteRoute
 import com.reposilite.web.api.ReposiliteRoutes
-import io.javalin.community.routing.Route
 import io.javalin.community.routing.Route.GET
 import io.javalin.community.routing.Route.PUT
 import io.javalin.openapi.HttpMethod
@@ -42,7 +41,10 @@ internal class SettingsEndpoints(private val sharedConfigurationFacade: SharedCo
         summary = "List configurations",
         responses = [
             OpenApiResponse(status = "200", description = "Returns list of configuration names"),
-            OpenApiResponse(status = "401", description = "Returns 401 if token without moderation permission has been used to access this resource")
+            OpenApiResponse(
+                status = "401",
+                description = "Returns 401 if token without moderation permission has been used to access this resource"
+            )
         ]
     )
     private val listConfigurations = ReposiliteRoute<Collection<String>>("/api/settings/domains", GET) {
@@ -67,7 +69,10 @@ internal class SettingsEndpoints(private val sharedConfigurationFacade: SharedCo
                 status = "401",
                 description = "Returns 401 if token without moderation permission has been used to access this resource"
             ),
-            OpenApiResponse(status = "404", description = "Returns 404 if non-existing configuration schema is requested")
+            OpenApiResponse(
+                status = "404",
+                description = "Returns 404 if non-existing configuration schema is requested"
+            )
         ]
     )
     private val getSchema = ReposiliteRoute<InputStream>("/api/settings/schema/{name}", GET) {
@@ -87,7 +92,10 @@ internal class SettingsEndpoints(private val sharedConfigurationFacade: SharedCo
         pathParams = [OpenApiParam(name = "name", description = "Name of configuration to fetch", required = true)],
         responses = [
             OpenApiResponse(status = "200", description = "Returns dto representing configuration"),
-            OpenApiResponse(status = "401", description = "Returns 401 if token without moderation permission has been used to access this resource"),
+            OpenApiResponse(
+                status = "401",
+                description = "Returns 401 if token without moderation permission has been used to access this resource"
+            ),
             OpenApiResponse(status = "404", description = "Returns 404 if non-existing configuration is requested")
         ]
     )

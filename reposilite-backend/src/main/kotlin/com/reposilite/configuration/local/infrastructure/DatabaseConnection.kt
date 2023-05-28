@@ -43,11 +43,31 @@ object DatabaseConnectionFactory {
 
     fun createConnection(workingDirectory: Path, databaseConfiguration: String, databaseThreadPoolSize: Int): DatabaseConnection =
         when {
-            databaseConfiguration.startsWith("mysql") -> connectWithStandardDatabase(databaseConfiguration, "jdbc:mysql", "com.mysql.cj.jdbc.Driver", databaseThreadPoolSize)
-            databaseConfiguration.startsWith("sqlite") -> connectWithEmbeddedDatabase(workingDirectory, databaseConfiguration, "org.sqlite.JDBC", "jdbc:sqlite:%file%")
+            databaseConfiguration.startsWith("mysql") -> connectWithStandardDatabase(
+                databaseConfiguration,
+                "jdbc:mysql",
+                "com.mysql.cj.jdbc.Driver",
+                databaseThreadPoolSize
+            )
+            databaseConfiguration.startsWith("sqlite") -> connectWithEmbeddedDatabase(
+                workingDirectory,
+                databaseConfiguration,
+                "org.sqlite.JDBC",
+                "jdbc:sqlite:%file%"
+            )
             /* Experimental implementations (not covered with integration tests) */
-            databaseConfiguration.startsWith("postgresql") -> connectWithStandardDatabase(databaseConfiguration, "jdbc:postgresql", "org.postgresql.Driver", databaseThreadPoolSize)
-            databaseConfiguration.startsWith("h2") -> connectWithEmbeddedDatabase(workingDirectory, databaseConfiguration, "org.h2.Driver", "jdbc:h2:%file%;MODE=MYSQL")
+            databaseConfiguration.startsWith("postgresql") -> connectWithStandardDatabase(
+                databaseConfiguration,
+                "jdbc:postgresql",
+                "org.postgresql.Driver",
+                databaseThreadPoolSize
+            )
+            databaseConfiguration.startsWith("h2") -> connectWithEmbeddedDatabase(
+                workingDirectory,
+                databaseConfiguration,
+                "org.h2.Driver",
+                "jdbc:h2:%file%;MODE=MYSQL"
+            )
             else -> throw RuntimeException("Unknown database: $databaseConfiguration")
         }
 
@@ -60,12 +80,13 @@ object DatabaseConnectionFactory {
     private fun connectWithEmbeddedDatabase(workingDirectory: Path, databaseConfiguration: String, driver: String, dialect: String): DatabaseConnection =
         with(loadCommandBasedConfiguration(EmbeddedSQLDatabaseSettings(), databaseConfiguration).configuration) {
             val databaseFile =
-                if (temporary)
+                if (temporary) {
                     File.createTempFile("reposilite-database", ".db")
                         .also { it.deleteOnExit() }
                         .toPath()
-                else
+                } else {
                     workingDirectory.resolve(fileName)
+                }
 
             createDataSource(driver, dialect.replace("%file%", databaseFile.absolutePathString()), 1)
                 .let { DatabaseConnection(it, Database.connect(it)) }

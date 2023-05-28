@@ -26,10 +26,12 @@ object BadgeGenerator {
      * Just in case, mostly to avoid issues with XML based template
      */
     private val supportedCharacters = Regex("[\\sa-zA-Z0-9:\\-.,+=()\\[\\]]+")
+
     /**
      * Badges use non-monospaced font, so we need to trim short chars to estimate real width of text
      */
     private val shortCharacters = listOf('i', 'I', 'f', 'j', 'l', '.', '-', '1')
+
     /**
      * Standard green color used by well-known badges on GitHub
      */

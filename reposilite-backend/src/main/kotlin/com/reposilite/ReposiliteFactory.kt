@@ -50,12 +50,18 @@ object ReposiliteFactory {
         journalist.logger.info("${Effect.GREEN}Reposilite ${Effect.RESET}$VERSION")
         journalist.logger.info("")
         journalist.logger.info("--- Environment")
-        journalist.logger.info("Platform: ${System.getProperty("java.version")} (${System.getProperty("os.name")} :: ${System.getProperty("os.arch")})")
+        journalist.logger.info(
+            "Platform: ${System.getProperty("java.version")} (${System.getProperty("os.name")} :: ${System.getProperty(
+                "os.arch"
+            )})"
+        )
         journalist.logger.info("Running as: ${System.getProperty("user.name")}")
         journalist.logger.info("Working directory: ${parameters.workingDirectory.toAbsolutePath()}")
         journalist.logger.info("Plugin directory: ${parameters.pluginDirectory.toAbsolutePath()}")
         journalist.logger.info("Configuration: ${parameters.localConfigurationPath.absolutePathString()}")
-        journalist.logger.info("Threads: ${localConfiguration.webThreadPool.get()} WEB / ${localConfiguration.ioThreadPool.get()} IO / ${localConfiguration.databaseThreadPool.get()} DB")
+        journalist.logger.info(
+            "Threads: ${localConfiguration.webThreadPool.get()} WEB / ${localConfiguration.ioThreadPool.get()} IO / ${localConfiguration.databaseThreadPool.get()} DB"
+        )
         journalist.logger.info("Loom enabled: ${LoomExtensions.isLoomAvailable()}")
         if (parameters.testEnv) journalist.logger.info("Test environment: Enabled")
 

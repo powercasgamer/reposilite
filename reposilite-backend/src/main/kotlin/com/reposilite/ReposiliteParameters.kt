@@ -37,7 +37,10 @@ class ReposiliteParameters : Runnable {
     @Option(names = ["--version", "-v"], versionHelp = true, description = ["Display current version of reposilite"])
     var versionInfoRequested = false
 
-    @Option(names = ["--working-directory", "-wd"], description = ["Set custom working directory of application instance"])
+    @Option(
+        names = ["--working-directory", "-wd"],
+        description = ["Set custom working directory of application instance"]
+    )
     var workingDirectoryName = ""
     lateinit var workingDirectory: Path
 
@@ -45,29 +48,44 @@ class ReposiliteParameters : Runnable {
     var pluginDirectoryName: String? = null
     lateinit var pluginDirectory: Path
 
-    @Option(names = ["--generate-configuration", "-gc"], description = ["" +
-        "Generate default template of the configuration file. Supported templates:",
-        "configuration.cdn - Local configuration file",
-        "configuration.shared.json - Shared configuration file"
-    ])
+    @Option(
+        names = ["--generate-configuration", "-gc"],
+        description = ["" +
+            "Generate default template of the configuration file. Supported templates:",
+            "configuration.cdn - Local configuration file",
+            "configuration.shared.json - Shared configuration file"
+        ]
+    )
     var configurationRequested: String? = null
 
-    @Option(names = ["--local-configuration", "--local-config", "-lc"], description = ["Set custom location of local configuration file"])
+    @Option(
+        names = ["--local-configuration", "--local-config", "-lc"],
+        description = ["Set custom location of local configuration file"]
+    )
     var localConfigurationFile = LOCAL_CONFIGURATION_FILE
     lateinit var localConfigurationPath: Path
 
-    @Option(names = ["--local-configuration-mode", "--local-config-mode", "-lcm"], description = [
-        "Supported local configuration modes:",
-        "auto - process and override main configuration file",
-        "none - disable automatic updates of configuration file"
-    ])
+    @Option(
+        names = ["--local-configuration-mode", "--local-config-mode", "-lcm"],
+        description = [
+            "Supported local configuration modes:",
+            "auto - process and override main configuration file",
+            "none - disable automatic updates of configuration file"
+        ]
+    )
     var localConfigurationMode = LocalConfigurationMode.AUTO
 
-    @Option(names = ["--shared-configuration", "--shared-config", "-sc"], description = ["Set custom location of shared configuration file"])
+    @Option(
+        names = ["--shared-configuration", "--shared-config", "-sc"],
+        description = ["Set custom location of shared configuration file"]
+    )
     var sharedConfigurationFile: String? = null
     var sharedConfigurationPath: Path? = null
 
-    @Option(names = ["--ignore-shared-configuration-errors"], description = ["Ignore errors while loading shared configuration file"])
+    @Option(
+        names = ["--ignore-shared-configuration-errors"],
+        description = ["Ignore errors while loading shared configuration file"]
+    )
     var ignoreSharedConfigurationErrors = false
 
     @Option(names = ["--hostname", "-h"], description = ["Override hostname from configuration"])
@@ -79,7 +97,10 @@ class ReposiliteParameters : Runnable {
     @Option(names = ["--database"], description = ["Override database connection from local configuration"])
     var database = ""
 
-    @Option(names = ["--token", "-t"], description = ["Create temporary token with the given credentials in name:secret format", "Created token has all permissions"])
+    @Option(
+        names = ["--token", "-t"],
+        description = ["Create temporary token with the given credentials in name:secret format", "Created token has all permissions"]
+    )
     var tokenEntries = arrayOf<String>()
     lateinit var tokens: Collection<CreateAccessTokenRequest>
 
@@ -96,8 +117,12 @@ class ReposiliteParameters : Runnable {
         this.workingDirectory = Paths.get(workingDirectoryName)
         this.pluginDirectory = pluginDirectoryName?.let { Paths.get(it) } ?: workingDirectory.resolve("plugins")
 
-        this.localConfigurationPath = localConfigurationFile.let { workingDirectory.resolve(it.ifEmpty { LOCAL_CONFIGURATION_FILE }) }
-        this.sharedConfigurationPath = sharedConfigurationFile?.let { workingDirectory.resolve(it.ifEmpty { SHARED_CONFIGURATION_FILE }) }
+        this.localConfigurationPath = localConfigurationFile.let { workingDirectory.resolve(
+            it.ifEmpty { LOCAL_CONFIGURATION_FILE }
+        ) }
+        this.sharedConfigurationPath = sharedConfigurationFile?.let { workingDirectory.resolve(
+            it.ifEmpty { SHARED_CONFIGURATION_FILE }
+        ) }
 
         this.tokens = tokenEntries
             .map { it.split(":", limit = 2) }

@@ -34,11 +34,15 @@ internal class RouteAdd(private val accessTokenFacade: AccessTokenFacade) : Repo
     @Parameters(index = "1", paramLabel = "<path>", description = ["Path to the route, e.g. /releases/com/reposilite"])
     private lateinit var route: String
 
-    @Parameters(index = "2", paramLabel = "<permissions>", description = [
-        "Route permissions, e.g. rw. Available permissions:",
-        "r - allows token to read resources under the associated path (route:read)",
-        "w - allows token to write (deploy) resources under the associated path (route:write)"
-    ])
+    @Parameters(
+        index = "2",
+        paramLabel = "<permissions>",
+        description = [
+            "Route permissions, e.g. rw. Available permissions:",
+            "r - allows token to read resources under the associated path (route:read)",
+            "w - allows token to write (deploy) resources under the associated path (route:write)"
+        ]
+    )
     private lateinit var permissions: String
 
     override fun execute(context: CommandContext) {
@@ -55,7 +59,9 @@ internal class RouteAdd(private val accessTokenFacade: AccessTokenFacade) : Repo
                 val mappedPermissions = mapPermissions() ?: let {
                     context.status = FAILED
                     context.append("Unknown permission shortcuts (${permissions.toCharArray().joinToString()})")
-                    context.append("Available options (${RoutePermission.values().joinToString { perm -> perm.shortcut }})")
+                    context.append(
+                        "Available options (${RoutePermission.values().joinToString { perm -> perm.shortcut }})"
+                    )
                     return
                 }
 

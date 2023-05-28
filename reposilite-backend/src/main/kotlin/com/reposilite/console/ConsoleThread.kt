@@ -35,7 +35,9 @@ internal class ConsoleThread(
 
         if (!input.hasNextLine()) {
             commandExecutor.logger.warn("Interactive CLI is not available in current environment.")
-            commandExecutor.logger.warn("Solution for Docker users: https://docs.docker.com/engine/reference/run/#foreground")
+            commandExecutor.logger.warn(
+                "Solution for Docker users: https://docs.docker.com/engine/reference/run/#foreground"
+            )
             return
         }
 

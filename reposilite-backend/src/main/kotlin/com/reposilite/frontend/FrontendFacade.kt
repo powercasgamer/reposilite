@@ -52,7 +52,9 @@ class FrontendFacade internal constructor(
                 URLEncoder.encode("{{REPOSILITE.BASE_PATH}}", StandardCharsets.UTF_8) to formattedBasePath.get(),
 
                 "{{REPOSILITE.VITE_BASE_PATH}}" to formatAsViteBasePath(formattedBasePath.get()),
-                URLEncoder.encode("{{REPOSILITE.VITE_BASE_PATH}}", StandardCharsets.UTF_8) to formatAsViteBasePath(formattedBasePath.get()),
+                URLEncoder.encode("{{REPOSILITE.VITE_BASE_PATH}}", StandardCharsets.UTF_8) to formatAsViteBasePath(
+                    formattedBasePath.get()
+                ),
 
                 "{{REPOSILITE.ID}}" to id,
                 "{{REPOSILITE.TITLE}}" to title,

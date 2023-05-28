@@ -52,8 +52,15 @@ internal class MavenEndpoints(
             OpenApiParam(name = "gav", description = "Artifact path qualifier", required = true, allowEmptyValue = true)
         ],
         responses = [
-            OpenApiResponse(status = "200", description = "Input stream of requested file", content = [OpenApiContent(type = FORM_DATA_MULTIPART)]),
-            OpenApiResponse(status = "404", description = "Returns 404 (for Maven) with frontend (for user) as a response if requested resource is not located in the current repository")
+            OpenApiResponse(
+                status = "200",
+                description = "Input stream of requested file",
+                content = [OpenApiContent(type = FORM_DATA_MULTIPART)]
+            ),
+            OpenApiResponse(
+                status = "404",
+                description = "Returns 404 (for Maven) with frontend (for user) as a response if requested resource is not located in the current repository"
+            )
         ]
     )
     private val findFile = ReposiliteRoute<Unit>("/{repository}/<gav>", HEAD, GET) {
@@ -61,7 +68,13 @@ internal class MavenEndpoints(
             requireGav { gav ->
                 LookupRequest(this?.identifier, requireParameter("repository"), gav)
                     .let { request -> mavenFacade.findFile(request) }
-                    .peek { (details, file) -> ctx.resultAttachment(details.name, details.contentType, details.contentLength, compressionStrategy, file) }
+                    .peek { (details, file) -> ctx.resultAttachment(
+                        details.name,
+                        details.contentType,
+                        details.contentLength,
+                        compressionStrategy,
+                        file
+                    ) }
                     .onError {
                         ctx.status(it.status).html(frontendFacade.createNotFoundPage(uri, it.message))
                         mavenFacade.logger.debug("FIND | Could not find file due to $it")
@@ -81,9 +94,16 @@ internal class MavenEndpoints(
             OpenApiParam(name = "gav", description = "Artifact path qualifier", required = true)
         ],
         responses = [
-            OpenApiResponse(status = "200", description = "Input stream of requested file", content = [OpenApiContent(type = FORM_DATA_MULTIPART)]),
+            OpenApiResponse(
+                status = "200",
+                description = "Input stream of requested file",
+                content = [OpenApiContent(type = FORM_DATA_MULTIPART)]
+            ),
             OpenApiResponse(status = "401", description = "Returns 401 for invalid credentials"),
-            OpenApiResponse(status = "507", description = "Returns 507 if Reposilite does not have enough disk space to store the uploaded file")
+            OpenApiResponse(
+                status = "507",
+                description = "Returns 507 if Reposilite does not have enough disk space to store the uploaded file"
+            )
         ]
     )
     private val deployFile = ReposiliteRoute<Unit>("/{repository}/<gav>", POST, PUT) {
@@ -113,7 +133,9 @@ internal class MavenEndpoints(
         authorized {
             requireGav { gav ->
                 requireRepository { repository ->
-                    response = mavenFacade.deleteFile(DeleteRequest(this.identifier, repository, gav, getSessionIdentifier()))
+                    response = mavenFacade.deleteFile(
+                        DeleteRequest(this.identifier, repository, gav, getSessionIdentifier())
+                    )
                 }
             }
         }

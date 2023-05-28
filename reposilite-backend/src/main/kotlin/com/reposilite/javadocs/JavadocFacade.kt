@@ -122,7 +122,11 @@ class JavadocFacade internal constructor(
         request.gav
             .takeIf { it.contains("/latest") }
             ?.let { request.gav.locationBeforeLast("/latest") }
-            ?.let { gavWithoutVersion -> VersionLookupRequest(request.accessToken, request.repository, gavWithoutVersion) }
+            ?.let { gavWithoutVersion -> VersionLookupRequest(
+                request.accessToken,
+                request.repository,
+                gavWithoutVersion
+            ) }
             ?.let { mavenFacade.findLatestVersion(it) }
             ?.map { request.gav.replace(LATEST_PATTERN, "/%s".format(it.version)) }
             ?.orNull()

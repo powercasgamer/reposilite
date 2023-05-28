@@ -57,14 +57,34 @@ internal class MavenLatestApiEndpoints(
             OpenApiParam(name = "gav", description = "Artifact path qualifier", required = true, allowEmptyValue = true)
         ],
         queryParams = [
-            OpenApiParam(name = "extension", description = "Changes extension of matched file (by default matches 'jar')", required = false),
-            OpenApiParam(name = "classifier", description = "Appends classifier suffix to matched file", required = false),
+            OpenApiParam(
+                name = "extension",
+                description = "Changes extension of matched file (by default matches 'jar')",
+                required = false
+            ),
+            OpenApiParam(
+                name = "classifier",
+                description = "Appends classifier suffix to matched file",
+                required = false
+            ),
             OpenApiParam(name = "filter", description = "Version (prefix) filter to apply", required = false),
-            OpenApiParam(name = "type", description = "Format of expected response type: empty (default) for json; 'raw' for plain text", required = false),
+            OpenApiParam(
+                name = "type",
+                description = "Format of expected response type: empty (default) for json; 'raw' for plain text",
+                required = false
+            ),
         ],
         responses = [
-            OpenApiResponse("200", content = [OpenApiContent(from = LatestVersionResponse::class)], description = "default response"),
-            OpenApiResponse("200", content = [OpenApiContent(from = String::class, type = ContentType.PLAIN)], description = ""),
+            OpenApiResponse(
+                "200",
+                content = [OpenApiContent(from = LatestVersionResponse::class)],
+                description = "default response"
+            ),
+            OpenApiResponse(
+                "200",
+                content = [OpenApiContent(from = String::class, type = ContentType.PLAIN)],
+                description = ""
+            ),
         ]
     )
     private val findLatestVersion = ReposiliteRoute<Any>("/api/maven/latest/version/{repository}/<gav>", GET) {
@@ -94,11 +114,23 @@ internal class MavenLatestApiEndpoints(
             OpenApiParam(name = "gav", description = "Artifact path qualifier", required = true, allowEmptyValue = true)
         ],
         queryParams = [
-            OpenApiParam(name = "extension", description = "Changes extension of matched file (by default matches 'jar')", required = false),
-            OpenApiParam(name = "classifier", description = "Appends classifier suffix to matched file", required = false),
+            OpenApiParam(
+                name = "extension",
+                description = "Changes extension of matched file (by default matches 'jar')",
+                required = false
+            ),
+            OpenApiParam(
+                name = "classifier",
+                description = "Appends classifier suffix to matched file",
+                required = false
+            ),
             OpenApiParam(name = "filter", description = "Version (prefix) filter to apply", required = false),
         ],
-        responses = [ OpenApiResponse("200", description = "Details about the given file", content = [OpenApiContent(from = FileDetails::class)]) ]
+        responses = [ OpenApiResponse(
+            "200",
+            description = "Details about the given file",
+            content = [OpenApiContent(from = FileDetails::class)]
+        ) ]
     )
     private val findLatestDetails = ReposiliteRoute("/api/maven/latest/details/{repository}/<gav>", GET) {
         accessed {
@@ -122,8 +154,16 @@ internal class MavenLatestApiEndpoints(
             OpenApiParam(name = "gav", description = "Artifact path qualifier", required = true, allowEmptyValue = true)
         ],
         queryParams = [
-            OpenApiParam(name = "extension", description = "Changes extension of matched file (by default matches 'jar')", required = false),
-            OpenApiParam(name = "classifier", description = "Appends classifier suffix to matched file", required = false),
+            OpenApiParam(
+                name = "extension",
+                description = "Changes extension of matched file (by default matches 'jar')",
+                required = false
+            ),
+            OpenApiParam(
+                name = "classifier",
+                description = "Appends classifier suffix to matched file",
+                required = false
+            ),
             OpenApiParam(name = "filter", description = "Version (prefix) filter to apply", required = false),
         ]
     )
@@ -136,7 +176,13 @@ internal class MavenLatestApiEndpoints(
                     repository = it,
                     handler = { lookupRequest ->
                         mavenFacade.findFile(lookupRequest).map { (details, file) ->
-                            ctx.resultAttachment(details.name, details.contentType, details.contentLength, compressionStrategy, file)
+                            ctx.resultAttachment(
+                                details.name,
+                                details.contentType,
+                                details.contentLength,
+                                compressionStrategy,
+                                file
+                            )
                         }
                     }
                 )

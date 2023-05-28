@@ -82,7 +82,9 @@ internal class MavenService(
     fun deployFile(deployRequest: DeployRequest): Result<Unit, ErrorResponse> {
         val (repository, path) = deployRequest
 
-        if (repository.redeployment.not() && !path.getSimpleName().contains(METADATA_FILE) && repository.storageProvider.exists(path)) {
+        if (repository.redeployment.not() && !path.getSimpleName().contains(METADATA_FILE) && repository.storageProvider.exists(
+                path
+            )) {
             return badRequestError("Redeployment is not allowed")
         }
 
@@ -148,10 +150,14 @@ internal class MavenService(
 
     private fun <T> resolve(lookupRequest: LookupRequest, block: (Repository, Location) -> Result<T, ErrorResponse>): Result<T, ErrorResponse> {
         val (accessToken, repositoryName, gav) = lookupRequest
-        val repository = repositoryService.getRepository(lookupRequest.repository) ?: return notFoundError("Repository $repositoryName not found")
+        val repository = repositoryService.getRepository(lookupRequest.repository) ?: return notFoundError(
+            "Repository $repositoryName not found"
+        )
 
         return canAccessResource(lookupRequest.accessToken, repository.name, gav)
-            .onError { logger.debug("ACCESS | Unauthorized attempt of access (token: $accessToken) to $gav from ${repository.name}") }
+            .onError { logger.debug(
+                "ACCESS | Unauthorized attempt of access (token: $accessToken) to $gav from ${repository.name}"
+            ) }
             .peek { extensions.emitEvent(PreResolveEvent(accessToken, repository, gav)) }
             .flatMap { block(repository, gav) }
     }

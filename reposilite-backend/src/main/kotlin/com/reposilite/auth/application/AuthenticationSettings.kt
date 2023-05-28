@@ -38,14 +38,23 @@ data class LdapSettings(
     val port: Int = 389,
     @get:Doc(title = "Base DN", description = "Base DN with users")
     val baseDn: String = "dc=company,dc=com",
-    @get:Doc(title = "Search-User DN", description = "User used to perform searches in LDAP server (requires permissions to read all LDAP entries)")
+    @get:Doc(
+        title = "Search-User DN",
+        description = "User used to perform searches in LDAP server (requires permissions to read all LDAP entries)"
+    )
     val searchUserDn: String = "cn=reposilite,ou=admins,dc=domain,dc=com",
     @get:Doc(title = "Search-User Password", description = "Search user's password")
     val searchUserPassword: String = "reposilite-admin-secret",
-    @get:Doc(title = "User Attribute", description = "Attribute in LDAP that represents unique username used to create access token")
+    @get:Doc(
+        title = "User Attribute",
+        description = "Attribute in LDAP that represents unique username used to create access token"
+    )
     val userAttribute: String = "cn",
     @get:Doc(title = "User Filter", description = "LDAP user filter")
     val userFilter: String = "(&(objectClass=person)(ou=Maven Users))",
-    @get:Doc(title = "User Type", description = "Should the created through LDAP access token be TEMPORARY or PERSISTENT")
+    @get:Doc(
+        title = "User Type",
+        description = "Should the created through LDAP access token be TEMPORARY or PERSISTENT"
+    )
     val userType: AccessTokenType = PERSISTENT
 ) : SharedSettings

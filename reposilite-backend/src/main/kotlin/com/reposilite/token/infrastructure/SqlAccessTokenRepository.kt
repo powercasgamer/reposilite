@@ -84,7 +84,11 @@ internal class SqlAccessTokenRepository(private val database: Database) : Access
     init {
         transaction(database) {
             SchemaUtils.create(AccessTokenTable, PermissionToAccessTokenTable, PermissionToRouteTable)
-            SchemaUtils.createMissingTablesAndColumns(AccessTokenTable, PermissionToAccessTokenTable, PermissionToRouteTable)
+            SchemaUtils.createMissingTablesAndColumns(
+                AccessTokenTable,
+                PermissionToAccessTokenTable,
+                PermissionToRouteTable
+            )
         }
     }
 
@@ -152,7 +156,7 @@ internal class SqlAccessTokenRepository(private val database: Database) : Access
             PermissionToRouteTable.deleteWhere {
                 Op.andOf(
                     { PermissionToRouteTable.accessTokenId eq id.value },
-                    { PermissionToRouteTable.route eq route.path  },
+                    { PermissionToRouteTable.route eq route.path },
                     { PermissionToRouteTable.permission eq route.permission.identifier }
                 )
             }
@@ -182,7 +186,10 @@ internal class SqlAccessTokenRepository(private val database: Database) : Access
     override fun findAccessTokenRoutesById(id: AccessTokenIdentifier): Set<Route> =
         transaction(database) {
             PermissionToRouteTable.select { PermissionToRouteTable.accessTokenId eq id.value }
-                .map { Route(it[PermissionToRouteTable.route], findRoutePermissionByIdentifier(it[PermissionToRouteTable.permission]).get()) }
+                .map { Route(
+                    it[PermissionToRouteTable.route],
+                    findRoutePermissionByIdentifier(it[PermissionToRouteTable.permission]).get()
+                ) }
                 .toSet()
         }
 

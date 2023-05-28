@@ -38,18 +38,37 @@ internal class StatisticsEndpoint(private val statisticsFacade: StatisticsFacade
         path = "/api/statistics/resolved/phrase/{limit}/{repository}/{gav}",
         methods = [HttpMethod.GET],
         pathParams = [
-            OpenApiParam(name = "limit", description = "Amount of records to find (Maximum: $MAX_PAGE_SIZE", required = true),
+            OpenApiParam(
+                name = "limit",
+                description = "Amount of records to find (Maximum: $MAX_PAGE_SIZE",
+                required = true
+            ),
             OpenApiParam(name = "repository", description = "Repository to search in", required = true),
             OpenApiParam(name = "gav", description = "Phrase to search for", required = true, allowEmptyValue = true)
         ],
         responses = [
-            OpenApiResponse("200", content = [ OpenApiContent(from = ResolvedCountResponse::class) ], description = "Aggregated sum of resolved requests with list a list of them all"),
-            OpenApiResponse("401", content = [ OpenApiContent(from = ErrorResponse::class) ], description = "When invalid token is used")
+            OpenApiResponse(
+                "200",
+                content = [ OpenApiContent(from = ResolvedCountResponse::class) ],
+                description = "Aggregated sum of resolved requests with list a list of them all"
+            ),
+            OpenApiResponse(
+                "401",
+                content = [ OpenApiContent(from = ErrorResponse::class) ],
+                description = "When invalid token is used"
+            )
         ]
     )
-    val findCountByPhrase = ReposiliteRoute<ResolvedCountResponse>("/api/statistics/resolved/phrase/{limit}/{repository}/<gav>", GET) {
+    val findCountByPhrase = ReposiliteRoute<ResolvedCountResponse>(
+        "/api/statistics/resolved/phrase/{limit}/{repository}/<gav>",
+        GET
+    ) {
         authorized("/${requireParameter("repository")}/${requireParameter("gav")}") {
-            response = statisticsFacade.findResolvedRequestsByPhrase(requireParameter("repository"), requireParameter("gav"), 1)
+            response = statisticsFacade.findResolvedRequestsByPhrase(
+                requireParameter("repository"),
+                requireParameter("gav"),
+                1
+            )
         }
     }
 
@@ -58,8 +77,16 @@ internal class StatisticsEndpoint(private val statisticsFacade: StatisticsFacade
         path = "/api/statistics/resolved/unique",
         methods = [HttpMethod.GET],
         responses = [
-            OpenApiResponse("200", content = [ OpenApiContent(from = Long::class) ], description = "Number of all unique requests"),
-            OpenApiResponse("401", content = [ OpenApiContent(from = ErrorResponse::class) ], description = "When non-manager token is used")
+            OpenApiResponse(
+                "200",
+                content = [ OpenApiContent(from = Long::class) ],
+                description = "Number of all unique requests"
+            ),
+            OpenApiResponse(
+                "401",
+                content = [ OpenApiContent(from = ErrorResponse::class) ],
+                description = "When non-manager token is used"
+            )
         ]
     )
     val findUniqueCount = ReposiliteRoute<Long>("/api/statistics/resolved/unique", GET) {
@@ -73,8 +100,16 @@ internal class StatisticsEndpoint(private val statisticsFacade: StatisticsFacade
         path = "/api/statistics/resolved/all",
         methods = [HttpMethod.GET],
         responses = [
-            OpenApiResponse("200", content = [ OpenApiContent(from = AllResolvedResponse::class) ], description = "Aggregated list of statistics per each repository"),
-            OpenApiResponse("401", content = [ OpenApiContent(from = ErrorResponse::class) ], description = "When non-manager token is used")
+            OpenApiResponse(
+                "200",
+                content = [ OpenApiContent(from = AllResolvedResponse::class) ],
+                description = "Aggregated list of statistics per each repository"
+            ),
+            OpenApiResponse(
+                "401",
+                content = [ OpenApiContent(from = ErrorResponse::class) ],
+                description = "When non-manager token is used"
+            )
         ]
     )
     val getAllStatistics = ReposiliteRoute<AllResolvedResponse>("/api/statistics/resolved/all", GET) {

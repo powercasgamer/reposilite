@@ -71,10 +71,11 @@ class ReposiliteJournalist(
         this.tinyLog = TinyLogLogger(Channel.ALL, redirectedLogger) // Redirect TinyLog output to redirected loggers
 
         this.mainLogger =
-            if (testEnv)
+            if (testEnv) {
                 PrintStreamLogger(PrintStream(Files.createTempFile("reposilite", "test-out").toFile()), System.err)
-            else
+            } else {
                 Slf4jLogger(LoggerFactory.getLogger(Reposilite::class.java))
+            }
     }
 
     fun subscribe(subscriber: Subscriber<MutableEntry<Channel, String>>): Int =

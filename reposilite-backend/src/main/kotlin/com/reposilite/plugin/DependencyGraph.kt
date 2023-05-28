@@ -61,10 +61,11 @@ fun toFlattenedDependencyGraph(declarations: Map<String, List<String>>): List<St
 private fun deepSearch(declarations: Map<String, List<String>>, track: Set<String>, current: String): List<String>? =
     declarations[current]!!.asSequence()
         .map { dependency ->
-            if (track.contains(dependency))
+            if (track.contains(dependency)) {
                 track.toMutableList().also { it.add(dependency) }
-            else
+            } else {
                 deepSearch(declarations, track.toMutableSet().also { it.add(dependency) }, dependency)
+            }
         }
         .filterNotNull()
         .firstOrNull()

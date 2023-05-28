@@ -70,12 +70,24 @@ class MavenFacade internal constructor(
         metadataService.findMetadata(repository, gav)
 
     fun findVersions(lookupRequest: VersionLookupRequest): Result<VersionsResponse, ErrorResponse> =
-        repositorySecurityProvider.canAccessResource(lookupRequest.accessToken, lookupRequest.repository, lookupRequest.gav)
+        repositorySecurityProvider.canAccessResource(
+            lookupRequest.accessToken,
+            lookupRequest.repository,
+            lookupRequest.gav
+        )
             .flatMap { metadataService.findVersions(lookupRequest.repository, lookupRequest.gav, lookupRequest.filter) }
 
     fun findLatestVersion(lookupRequest: VersionLookupRequest): Result<LatestVersionResponse, ErrorResponse> =
-        repositorySecurityProvider.canAccessResource(lookupRequest.accessToken, lookupRequest.repository, lookupRequest.gav)
-            .flatMap { metadataService.findLatestVersion(lookupRequest.repository, lookupRequest.gav, lookupRequest.filter) }
+        repositorySecurityProvider.canAccessResource(
+            lookupRequest.accessToken,
+            lookupRequest.repository,
+            lookupRequest.gav
+        )
+            .flatMap { metadataService.findLatestVersion(
+                lookupRequest.repository,
+                lookupRequest.gav,
+                lookupRequest.filter
+            ) }
 
     fun <T> findLatestVersionFile(latestArtifactQueryRequest: LatestArtifactQueryRequest, handler: MatchedVersionHandler<T>): Result<T, ErrorResponse> =
         latestService.queryLatestArtifact(

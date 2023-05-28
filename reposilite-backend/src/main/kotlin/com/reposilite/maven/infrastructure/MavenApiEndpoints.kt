@@ -70,14 +70,20 @@ internal class MavenApiEndpoints(mavenFacade: MavenFacade) : MavenRoutes(mavenFa
     private val findFileDetails: ContextDsl<FileDetails>.() -> Unit = {
         accessed {
             response = parameter("repository")
-                ?.let { repository -> mavenFacade.findDetails(LookupRequest(this?.identifier, repository, wildcard("gav").toLocation())) }
+                ?.let { repository -> mavenFacade.findDetails(
+                    LookupRequest(this?.identifier, repository, wildcard("gav").toLocation())
+                ) }
                 ?: mavenFacade.findRepositories(this?.identifier).asSuccess()
         }
     }
 
     private val findRepositories = ReposiliteRoute("/api/maven/details", GET, handler = findFileDetails)
     private val findRepository = ReposiliteRoute("/api/maven/details/{repository}", GET, handler = findFileDetails)
-    private val findInRepository = ReposiliteRoute("/api/maven/details/{repository}/<gav>", GET, handler = findFileDetails)
+    private val findInRepository = ReposiliteRoute(
+        "/api/maven/details/{repository}/<gav>",
+        GET,
+        handler = findFileDetails
+    )
 
     @OpenApi(
         tags = ["Maven"],

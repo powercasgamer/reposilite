@@ -42,7 +42,13 @@ class StorageProviderSerdes {
 
         override fun handleMissingInstantiator(ctx: DeserializationContext, type: Class<*>, instantiator: ValueInstantiator, parser: JsonParser, message: String): Any =
             when (type) {
-                StorageProviderSettings::class.java -> parser.parseStorageProvider() ?: super.handleMissingInstantiator(ctx, type, instantiator, parser, message)
+                StorageProviderSettings::class.java -> parser.parseStorageProvider() ?: super.handleMissingInstantiator(
+                    ctx,
+                    type,
+                    instantiator,
+                    parser,
+                    message
+                )
                 else -> super.handleMissingInstantiator(ctx, type, instantiator, parser, message)
             }
 
@@ -62,18 +68,22 @@ class StorageProviderSerdes {
     class StorageProviderEnumResolver : EnumResolver {
 
         override fun resolve(scope: FieldScope): Collection<String>? =
-            if (scope.name == "type")
+            if (scope.name == "type") {
                 STORAGE_PROVIDERS.filterValues { it == scope.declaringType.erasedType }.keys
-            else null
+            } else {
+                null
+            }
 
     }
 
     class StorageProviderSubtypeResolver : SubtypeResolver {
 
         override fun resolve(declaredType: ResolvedType, context: SchemaGenerationContext): List<ResolvedType>? =
-            if (declaredType.erasedType == StorageProviderSettings::class.java)
+            if (declaredType.erasedType == StorageProviderSettings::class.java) {
                 STORAGE_PROVIDERS.values.map { context.typeContext.resolveSubtype(declaredType, it) }
-            else null
+            } else {
+                null
+            }
 
     }
 

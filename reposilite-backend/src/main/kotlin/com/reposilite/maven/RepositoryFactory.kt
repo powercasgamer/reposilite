@@ -57,7 +57,9 @@ internal class RepositoryFactory(
 
         val host = when {
             name.isEmpty() -> {
-                failureFacade.logger.warn("Empty reference value of mirrored repository found, skipping configuration entry.")
+                failureFacade.logger.warn(
+                    "Empty reference value of mirrored repository found, skipping configuration entry."
+                )
                 return null
             }
             name.endsWith("/") -> name.substring(0, name.length - 1)
@@ -65,7 +67,9 @@ internal class RepositoryFactory(
         }
 
         val remoteClient = when {
-            repositoriesNames.contains(host) -> RepositoryLoopbackClient(lazy { repositoryProvider.getRepositories()[host]!! })
+            repositoriesNames.contains(host) -> RepositoryLoopbackClient(
+                lazy { repositoryProvider.getRepositories()[host]!! }
+            )
             else -> configurationSource.httpProxy
                 .takeIf { it.isNotEmpty() }
                 ?.let { createHttpProxy(it) }

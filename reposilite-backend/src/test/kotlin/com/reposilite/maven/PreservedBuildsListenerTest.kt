@@ -69,7 +69,9 @@ internal class PreservedBuildsListenerTest : MavenSpecification() {
                         snapshot = Snapshot(
                             timestamp = newTimestamp
                         ),
-                        _snapshotVersions = listOf(SnapshotVersion(value = "1.0.0-R0.1-$newTimestamp-3", updated = "20220101213703"))
+                        _snapshotVersions = listOf(
+                            SnapshotVersion(value = "1.0.0-R0.1-$newTimestamp-3", updated = "20220101213703")
+                        )
                     )
                 )
             )
@@ -77,7 +79,9 @@ internal class PreservedBuildsListenerTest : MavenSpecification() {
 
         // when: a new snapshot is deployed
         val repository = mavenFacade.getRepository(repositoryName)!!
-        preservedBuildsListener.onCall(DeployEvent(repository, "$versionId/maven-metadata.xml".toLocation(), "junit@localhost"))
+        preservedBuildsListener.onCall(
+            DeployEvent(repository, "$versionId/maven-metadata.xml".toLocation(), "junit@localhost")
+        )
 
         // then: builds 1 & 2 are deleted automatically
         assertCollectionsEquals(

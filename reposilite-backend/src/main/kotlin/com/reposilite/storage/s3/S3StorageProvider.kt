@@ -198,10 +198,11 @@ class S3StorageProvider(
 
             val paths = directories + files
 
-            if (paths.isEmpty())
+            if (paths.isEmpty()) {
                 notFoundError("Directory not found or is empty")
-            else
+            } else {
                 paths.asSuccess()
+            }
         } catch (exception: Exception) {
             internalServerError(exception.localizedMessage)
         }

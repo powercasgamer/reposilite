@@ -59,7 +59,8 @@ internal class RepositorySecurityProvider(private val accessTokenFacade: AccessT
     private fun hasPermissionTo(accessToken: AccessTokenIdentifier?, repository: Repository, gav: Location, permission: RoutePermission): Result<Unit, ErrorResponse> =
         accessToken
             ?.let {
-                Result.`when`(accessTokenFacade.hasPermissionTo(accessToken, "/${repository.name}/$gav", permission),
+                Result.`when`(
+                    accessTokenFacade.hasPermissionTo(accessToken, "/${repository.name}/$gav", permission),
                     { },
                     { FORBIDDEN.toErrorResponse("You must be the token owner or a manager to access this.") }
                 )

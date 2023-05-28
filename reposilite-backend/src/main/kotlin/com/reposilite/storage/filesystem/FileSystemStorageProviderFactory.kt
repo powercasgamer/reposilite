@@ -80,10 +80,11 @@ class FileSystemStorageProviderFactory : StorageProviderFactory<FileSystemStorag
         settings: FileSystemStorageProviderSettings
     ): FileSystemStorageProvider {
         val repositoryDirectory =
-            if (settings.mount.isEmpty())
+            if (settings.mount.isEmpty()) {
                 workingDirectory.resolve(repositoryName)
-            else
+            } else {
                 workingDirectory.resolve(settings.mount)
+            }
 
         Files.createDirectories(repositoryDirectory)
         return of(repositoryDirectory, settings.quota)

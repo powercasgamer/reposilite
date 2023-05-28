@@ -36,7 +36,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists
 
-@Plugin(name = "frontend", dependencies = ["local-configuration", "shared-configuration"], settings = FrontendSettings::class)
+@Plugin(
+    name = "frontend",
+    dependencies = ["local-configuration", "shared-configuration"],
+    settings = FrontendSettings::class
+)
 internal class FrontendPlugin : ReposilitePlugin() {
 
     internal companion object {

@@ -44,8 +44,13 @@ class StatisticsFacade internal constructor(
 
     fun incrementResolvedRequest(incrementResolvedRequest: IncrementResolvedRequest) {
         when {
-            statisticsEnabled.get() -> resolvedRequestsBulk.merge(incrementResolvedRequest.identifier, incrementResolvedRequest.count) { cached, value -> cached + value }
-            else -> logger.debug("Statistics | Cannot increment ${incrementResolvedRequest.identifier}, because statistics are disabled")
+            statisticsEnabled.get() -> resolvedRequestsBulk.merge(
+                incrementResolvedRequest.identifier,
+                incrementResolvedRequest.count
+            ) { cached, value -> cached + value }
+            else -> logger.debug(
+                "Statistics | Cannot increment ${incrementResolvedRequest.identifier}, because statistics are disabled"
+            )
         }
     }
 
@@ -75,22 +80,22 @@ class StatisticsFacade internal constructor(
             statisticsEnabled.get() ->
                 AllResolvedResponse(
                     repositories =
-                        statisticsRepository.getAllResolvedRequestsPerRepositoryAsTimeSeries()
-                            .mapValues { (_, records) ->
-                                val timeSeries = dateIntervalProvider
-                                    .map { it.createTimeSeries() }
-                                    .associateWith { 0L }
+                    statisticsRepository.getAllResolvedRequestsPerRepositoryAsTimeSeries()
+                        .mapValues { (_, records) ->
+                            val timeSeries = dateIntervalProvider
+                                .map { it.createTimeSeries() }
+                                .associateWith { 0L }
 
-                                (timeSeries + records)
-                                    .asSequence()
-                                    .map { (date, count) -> IntervalRecord(date.toUTCMillis(), count) }
-                                    .sortedBy { it.date }
-                                    .toList()
-                            }
-                            .asSequence()
-                            .map { (repository, records) -> RepositoryStatistics(repository, records) }
-                            .sortedWith(compareBy({ repository -> -repository.data.sumOf { it.count } }, { it.name }))
-                            .toList()
+                            (timeSeries + records)
+                                .asSequence()
+                                .map { (date, count) -> IntervalRecord(date.toUTCMillis(), count) }
+                                .sortedBy { it.date }
+                                .toList()
+                        }
+                        .asSequence()
+                        .map { (repository, records) -> RepositoryStatistics(repository, records) }
+                        .sortedWith(compareBy({ repository -> -repository.data.sumOf { it.count } }, { it.name }))
+                        .toList()
                 )
             else ->
                 AllResolvedResponse(statisticsEnabled = false)

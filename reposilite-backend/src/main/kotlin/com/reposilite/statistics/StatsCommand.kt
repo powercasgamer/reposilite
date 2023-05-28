@@ -30,10 +30,20 @@ private const val DEFAULT_TOP_LIMIT = 20
 @Command(name = "stats", description = ["Display collected metrics"])
 internal class StatsCommand(private val statisticsFacade: StatisticsFacade) : ReposiliteCommand {
 
-    @Parameters(index = "0", paramLabel = "[<repository>]", description = ["Repository to search in.", "By default it aggregates results from all repositories."], defaultValue = "")
+    @Parameters(
+        index = "0",
+        paramLabel = "[<repository>]",
+        description = ["Repository to search in.", "By default it aggregates results from all repositories."],
+        defaultValue = ""
+    )
     private lateinit var repository: String
 
-    @Parameters(index = "1", paramLabel = "[<filter>]", description = ["Accepts string as pattern and int as limiter"], defaultValue = "")
+    @Parameters(
+        index = "1",
+        paramLabel = "[<filter>]",
+        description = ["Accepts string as pattern and int as limiter"],
+        defaultValue = ""
+    )
     private lateinit var filter: String
 
     override fun execute(context: CommandContext) {
@@ -51,7 +61,9 @@ internal class StatsCommand(private val statisticsFacade: StatisticsFacade) : Re
                 if (repository.isNotEmpty()) context.append("  In repository: $repository")
                 context.append("  Sum of matched requests: ${response.sum}")
                 context.append("  Records:")
-                response.requests.forEachIndexed { order, request -> context.append("    ${order + 1}. /${request.gav} (${request.count})") }
+                response.requests.forEachIndexed { order, request -> context.append(
+                    "    ${order + 1}. /${request.gav} (${request.count})"
+                ) }
                 if (response.requests.isEmpty()) context.append("    ~ Matching records not found ~")
             }
             .onError {

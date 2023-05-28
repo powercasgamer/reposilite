@@ -104,7 +104,8 @@ data class Location private constructor(private val uri: String) {
 }
 
 fun String?.toLocation(): Location =
-    if (this != null)
+    if (this != null) {
         Location.of(this)
-    else
+    } else {
         Location.empty()
+    }

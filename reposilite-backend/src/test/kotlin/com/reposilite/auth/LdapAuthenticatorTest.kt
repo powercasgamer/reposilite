@@ -57,7 +57,9 @@ internal class LdapAuthenticatorTest : AuthenticationSpecification() {
             config.addAdditionalBindCredentials(it.searchUserDn, it.searchUserPassword)
             config.addAdditionalBindCredentials("cn=Bella Swan,ou=Maven Users,dc=domain,dc=com", "secret")
             config.addAdditionalBindCredentials("cn=James Smith,ou=Maven Users,dc=domain,dc=com", "secret2")
-            config.listenerConfigs.add(InMemoryListenerConfig.createLDAPConfig(it.hostname, InetAddress.getLoopbackAddress(), it.port, null))
+            config.listenerConfigs.add(
+                InMemoryListenerConfig.createLDAPConfig(it.hostname, InetAddress.getLoopbackAddress(), it.port, null)
+            )
             config.schema = null // remove
             this.ldapServer = InMemoryDirectoryServer(config)
             ldapServer.startListening(it.hostname)
@@ -77,12 +79,33 @@ internal class LdapAuthenticatorTest : AuthenticationSpecification() {
 
             ldapServer.add("dn: dc=domain,dc=com", "objectClass: top", "objectClass: domain")
 
-            ldapServer.add("dn: ou=Search Accounts,dc=domain,dc=com", "objectClass: organizationalUnit", "objectClass: top")
+            ldapServer.add(
+                "dn: ou=Search Accounts,dc=domain,dc=com",
+                "objectClass: organizationalUnit",
+                "objectClass: top"
+            )
             ldapServer.add("dn: ou=Maven Users,dc=domain,dc=com", "objectClass: organizationalUnit", "objectClass: top")
 
-            ldapServer.add("dn: cn=Reposilite,ou=Search Accounts,dc=domain,dc=com", "ou:Search Accounts", "objectClass: person", "memberOf: ou=Search Accounts,dc=domain,dc=com")
-            ldapServer.add("dn: cn=Bella Swan,ou=Maven Users,dc=domain,dc=com", "cn:Bella Swan", "ou:Maven Users", "objectClass: person", "memberOf: ou=Maven Users,dc=domain,dc=com")
-            ldapServer.add("dn: cn=James Smith,ou=Maven Users,dc=domain,dc=com", "cn:James Smith", "ou:Maven Users", "objectClass: person", "memberOf: ou=Maven Users,dc=domain,dc=com")
+            ldapServer.add(
+                "dn: cn=Reposilite,ou=Search Accounts,dc=domain,dc=com",
+                "ou:Search Accounts",
+                "objectClass: person",
+                "memberOf: ou=Search Accounts,dc=domain,dc=com"
+            )
+            ldapServer.add(
+                "dn: cn=Bella Swan,ou=Maven Users,dc=domain,dc=com",
+                "cn:Bella Swan",
+                "ou:Maven Users",
+                "objectClass: person",
+                "memberOf: ou=Maven Users,dc=domain,dc=com"
+            )
+            ldapServer.add(
+                "dn: cn=James Smith,ou=Maven Users,dc=domain,dc=com",
+                "cn:James Smith",
+                "ou:Maven Users",
+                "objectClass: person",
+                "memberOf: ou=Maven Users,dc=domain,dc=com"
+            )
 
         }
 
@@ -97,7 +120,10 @@ internal class LdapAuthenticatorTest : AuthenticationSpecification() {
     @Test
     fun `should connect with search user`() {
         val result = assertOk(authenticator.search("(&(objectClass=person)(cn=Reposilite)(ou=Search Accounts))", "cn"))
-        assertCollectionsEquals(listOf(Pair("cn=Reposilite,ou=Search Accounts,dc=domain,dc=com", mapOf("cn" to listOf("Reposilite")))), result)
+        assertCollectionsEquals(
+            listOf(Pair("cn=Reposilite,ou=Search Accounts,dc=domain,dc=com", mapOf("cn" to listOf("Reposilite")))),
+            result
+        )
     }
 
     @Test

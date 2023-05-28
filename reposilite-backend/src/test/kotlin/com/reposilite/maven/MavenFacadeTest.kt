@@ -125,7 +125,9 @@ internal class MavenFacadeTest : MavenSpecification() {
             val fileSpec = addFileToRepository(FileSpec(visibility.name, "/gav/file.pom", "content"))
 
             // when: the given directory is requested
-            val directoryInfo = mavenFacade.findDetails(LookupRequest(UNAUTHORIZED, fileSpec.repository, "gav".toLocation()))
+            val directoryInfo = mavenFacade.findDetails(
+                LookupRequest(UNAUTHORIZED, fileSpec.repository, "gav".toLocation())
+            )
 
             // then: response contains error
             assertError(directoryInfo)
@@ -144,14 +146,18 @@ internal class MavenFacadeTest : MavenSpecification() {
             val by = "dzikoysk@127.0.0.1"
 
             // when: the following file is deployed
-            val deployResult = mavenFacade.deployFile(DeployRequest(fileSpec.repository(), fileSpec.gav(), by, fileSpec.content.byteInputStream()))
+            val deployResult = mavenFacade.deployFile(
+                DeployRequest(fileSpec.repository(), fileSpec.gav(), by, fileSpec.content.byteInputStream())
+            )
 
             // then: file has been successfully stored
             assertOk(deployResult)
 
             // when: the deployed file is requested
             val accessToken = createAccessToken("name", "secret", fileSpec.repository, "/", READ)
-            val deployedFileResult = mavenFacade.findDetails(LookupRequest(accessToken, fileSpec.repository, fileSpec.gav()))
+            val deployedFileResult = mavenFacade.findDetails(
+                LookupRequest(accessToken, fileSpec.repository, fileSpec.gav())
+            )
 
             // then: the result file matches deployed file
             val deployedFile = assertOk(deployedFileResult)
@@ -166,7 +172,9 @@ internal class MavenFacadeTest : MavenSpecification() {
             var authentication = createAccessToken("invalid", "invalid", "invalid", "invalid", WRITE)
 
             // when: the given file is deleted with invalid credentials
-            val errorResponse = mavenFacade.deleteFile(DeleteRequest(authentication, fileSpec.repository(), fileSpec.gav(), "test@test"))
+            val errorResponse = mavenFacade.deleteFile(
+                DeleteRequest(authentication, fileSpec.repository(), fileSpec.gav(), "test@test")
+            )
 
             // then: response contains error
             assertError(errorResponse)
@@ -175,7 +183,9 @@ internal class MavenFacadeTest : MavenSpecification() {
             authentication = createAccessToken("name", "secret", PUBLIC.name, "gav", WRITE)
 
             // when: the given file is deleted with valid credentials
-            val response = mavenFacade.deleteFile(DeleteRequest(authentication, fileSpec.repository(), fileSpec.gav(), "test@test"))
+            val response = mavenFacade.deleteFile(
+                DeleteRequest(authentication, fileSpec.repository(), fileSpec.gav(), "test@test")
+            )
 
             // then: file has been deleted
             assertOk(response)
@@ -232,10 +242,17 @@ internal class MavenFacadeTest : MavenSpecification() {
         @Test
         fun `should find latest version with the given filter`() {
             // given: an artifact with metadata file
-            val (repository, artifact, _, filter) = useMetadata(PUBLIC.name, "/gav", listOf("2.0.1", "1.0.1", "1.0.2", "1.0.0", "2.0.0", "1.1.0"), "1.0.")
+            val (repository, artifact, _, filter) = useMetadata(
+                PUBLIC.name,
+                "/gav",
+                listOf("2.0.1", "1.0.1", "1.0.2", "1.0.0", "2.0.0", "1.1.0"),
+                "1.0."
+            )
 
             // when: latest version that starts with "1.0." is requested
-            val response = mavenFacade.findLatestVersion(VersionLookupRequest(UNAUTHORIZED, repository, artifact, filter))
+            val response = mavenFacade.findLatestVersion(
+                VersionLookupRequest(UNAUTHORIZED, repository, artifact, filter)
+            )
 
             // then: should return the latest version that starts with "1.0."
             assertOk("1.0.2", response.map { it.version })
@@ -244,7 +261,12 @@ internal class MavenFacadeTest : MavenSpecification() {
         @Test
         fun `should find all versions with the given prefix of the given filter`() {
             // given: an artifact with metadata file
-            val (repository, artifact, _, filter) = useMetadata(PUBLIC.name, "/gav", listOf("2.0.1", "1.0.1", "1.0.2", "1.0.0", "2.0.0", "1.1.0"), "1.0.")
+            val (repository, artifact, _, filter) = useMetadata(
+                PUBLIC.name,
+                "/gav",
+                listOf("2.0.1", "1.0.1", "1.0.2", "1.0.0", "2.0.0", "1.1.0"),
+                "1.0."
+            )
 
             // when: versions that start with "1.0." of the artifact are requested
             val response = mavenFacade.findVersions(VersionLookupRequest(UNAUTHORIZED, repository, artifact, filter))
@@ -296,7 +318,9 @@ internal class MavenFacadeTest : MavenSpecification() {
                 """.trimIndent()
             )
 
-            val metadataBody = assertOk(mavenFacade.findFile(LookupRequest(token, repository.name, gav.resolve(METADATA_FILE))))
+            val metadataBody = assertOk(
+                mavenFacade.findFile(LookupRequest(token, repository.name, gav.resolve(METADATA_FILE)))
+            )
                 .second
                 .use { it.readAllBytes().decodeToString() }
 
@@ -306,7 +330,9 @@ internal class MavenFacadeTest : MavenSpecification() {
             assertThat(metadataBody).contains("<latest>3.0.1</latest>")
             assertThat(metadataBody).contains("<version>3.0.0</version>")
             assertThat(metadataBody).contains("<version>3.0.1</version>")
-            assertThat(metadataBody).contains("<lastUpdated>" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM")))
+            assertThat(metadataBody).contains(
+                "<lastUpdated>" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMM"))
+            )
         }
 
     }

@@ -22,7 +22,6 @@ import com.reposilite.shared.ErrorResponse
 import com.reposilite.shared.unauthorizedError
 import com.reposilite.web.api.ReposiliteRoute
 import com.reposilite.web.api.ReposiliteRoutes
-import io.javalin.community.routing.Route
 import io.javalin.community.routing.Route.POST
 import io.javalin.openapi.HttpMethod
 import io.javalin.openapi.OpenApi
@@ -38,7 +37,11 @@ internal class ConsoleEndpoint(private val consoleFacade: ConsoleFacade) : Repos
         summary = "Remote command execution",
         description = "Execute command using POST request. The commands are the same as in the console and can be listed using the 'help' command.",
         tags = ["Cli"],
-        headers = [OpenApiParam(name = "Authorization", description = "Name and secret provided as basic auth credentials", required = true)],
+        headers = [OpenApiParam(
+            name = "Authorization",
+            description = "Name and secret provided as basic auth credentials",
+            required = true
+        )],
         responses = [
             OpenApiResponse(
                 status = "200",

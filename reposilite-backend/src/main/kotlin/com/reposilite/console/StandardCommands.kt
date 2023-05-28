@@ -30,7 +30,12 @@ import java.util.concurrent.TimeUnit.SECONDS
 @Command(name = "help", aliases = ["?"], helpCommand = true, description = ["List of available commands"])
 internal class HelpCommand(private val consoleFacade: ConsoleFacade) : ReposiliteCommand {
 
-    @Parameters(index = "0", paramLabel = "[<command>]", description = ["Display usage of the given command"], defaultValue = "")
+    @Parameters(
+        index = "0",
+        paramLabel = "[<command>]",
+        description = ["Display usage of the given command"],
+        defaultValue = ""
+    )
     private lateinit var requestedCommand: String
 
     override fun execute(context: CommandContext) {

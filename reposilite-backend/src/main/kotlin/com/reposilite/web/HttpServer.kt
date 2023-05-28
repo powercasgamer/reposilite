@@ -59,10 +59,11 @@ class HttpServer {
     }
 
     private fun createJavalin(reposilite: Reposilite, webThreadPool: ThreadPool): Javalin =
-        if (servlet)
+        if (servlet) {
             Javalin.createStandalone { JavalinConfiguration.configure(reposilite, webThreadPool, it) }
-        else
+        } else {
             Javalin.create { JavalinConfiguration.configure(reposilite, webThreadPool, it) }
+        }
 
     fun stop() {
         javalin?.stop()

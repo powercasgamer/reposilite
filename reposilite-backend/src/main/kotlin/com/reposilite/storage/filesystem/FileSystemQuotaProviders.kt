@@ -38,7 +38,12 @@ internal class FixedQuota(rootDirectory: Path, private val maxSize: Long) : File
     override fun canHold(contentLength: Long): Result<Long, ErrorResponse> =
         usage()
             .map { usage -> maxSize - usage }
-            .filter({ available -> contentLength <= available }, { INSUFFICIENT_STORAGE.toErrorResponse("Repository cannot hold the given file (${maxSize - it} + $contentLength > $maxSize)") })
+            .filter(
+                { available -> contentLength <= available },
+                { INSUFFICIENT_STORAGE.toErrorResponse(
+                    "Repository cannot hold the given file (${maxSize - it} + $contentLength > $maxSize)"
+                ) }
+            )
 
 }
 
@@ -64,6 +69,11 @@ internal class PercentageQuota(
                 val max = capacity * maxPercentage
                 max.toLong() - usage
             }
-            .filter({ available -> contentLength <= available }, { INSUFFICIENT_STORAGE.toErrorResponse("Repository cannot hold the given file ($contentLength too much for $maxPercentage%)") })
+            .filter(
+                { available -> contentLength <= available },
+                { INSUFFICIENT_STORAGE.toErrorResponse(
+                    "Repository cannot hold the given file ($contentLength too much for $maxPercentage%)"
+                ) }
+            )
 
 }

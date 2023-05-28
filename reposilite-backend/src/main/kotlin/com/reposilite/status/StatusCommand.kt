@@ -42,7 +42,7 @@ internal class StatusCommand(private val statusFacade: StatusFacade) : Reposilit
         statusFacade.getLatestVersion()
             .fold(
                 { "${if (VERSION == it) GREEN else RED_UNDERLINED}$it$RESET" },
-                { "$RED_UNDERLINED$it${RESET}" }
+                { "$RED_UNDERLINED$it$RESET" }
             )
             .let { coloredStatus -> context.append("  Latest version of Reposilite: $coloredStatus") }
     }

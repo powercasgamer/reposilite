@@ -53,5 +53,5 @@ data class ResolvedFileEvent(
     val accessToken: AccessTokenIdentifier?,
     val repository: Repository,
     val gav: Location,
-    var result: Result<Pair< DocumentInfo, InputStream>, ErrorResponse>
+    var result: Result<Pair<DocumentInfo, InputStream>, ErrorResponse>
 ) : Event

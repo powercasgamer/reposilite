@@ -76,10 +76,11 @@ internal class LatestService(private val repositoryId: Reference<out String>) {
         with(query) {
             val suffix = version + (if (classifier != null) "-$classifier" else "") + "." + extension
 
-            if (isSnapshot)
+            if (isSnapshot) {
                 version to "$gav/${gav.locationBeforeLast("/", "").locationAfterLast("/", "")}-$suffix".toLocation()
-            else
+            } else {
                 version to "$gav/$version/${gav.locationAfterLast("/", "")}-$suffix".toLocation()
+            }
         }
 
 }

@@ -42,7 +42,9 @@ internal class PreservedBuildsListener(private val mavenFacade: MavenFacade) : E
                     .filterNot { it.toString().contains(snapshotToPreserve) }
                     .map { repository.storageProvider.removeFile(it) }
                     .count()
-                    .also { mavenFacade.logger.info("DEPLOY | Preserved Builds Listener | $it deprecated file(s) have been removed") }
+                    .also { mavenFacade.logger.info(
+                        "DEPLOY | Preserved Builds Listener | $it deprecated file(s) have been removed"
+                    ) }
             }
             .onError { throw RuntimeException(it.toString()) } // not sure how to handle failures of events yet
     }

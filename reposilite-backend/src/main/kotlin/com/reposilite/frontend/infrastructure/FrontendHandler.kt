@@ -27,7 +27,6 @@ import com.reposilite.storage.getSimpleName
 import com.reposilite.storage.inputStream
 import com.reposilite.web.api.ReposiliteRoute
 import com.reposilite.web.api.ReposiliteRoutes
-import io.javalin.community.routing.Route
 import io.javalin.community.routing.Route.GET
 import io.javalin.http.ContentType
 import io.javalin.http.Context
@@ -68,7 +67,9 @@ internal sealed class FrontendHandler(private val frontendFacade: FrontendFacade
 
 }
 
-internal class ResourcesFrontendHandler(frontendFacade: FrontendFacade, private val resourcesDirectory: String) : FrontendHandler(frontendFacade) {
+internal class ResourcesFrontendHandler(frontendFacade: FrontendFacade, private val resourcesDirectory: String) : FrontendHandler(
+    frontendFacade
+) {
 
     private val defaultHandler = ReposiliteRoute<InputStream>("/", GET) {
         response = respondWithBundledResource(ctx, "index.html")

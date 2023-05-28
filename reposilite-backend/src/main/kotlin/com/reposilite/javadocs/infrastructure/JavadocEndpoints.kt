@@ -49,7 +49,12 @@ internal class JavadocEndpoints(javadoc: JavadocFacade) : MavenRoutes(javadoc.ma
         accessed {
             requireGav { gav ->
                 requireRepository { repository ->
-                    response = JavadocRawRequest(this?.identifier, repository, gav, requireParameter("resource").toLocation())
+                    response = JavadocRawRequest(
+                        this?.identifier,
+                        repository,
+                        gav,
+                        requireParameter("resource").toLocation()
+                    )
                         .let { javadoc.findRawJavadocResource(it) }
                         .peek { ctx.encoding(Charsets.UTF_8).contentType(it.contentType) }
                         .map { it.content }

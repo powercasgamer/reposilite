@@ -41,7 +41,12 @@ internal abstract class AccessTokenSpecification {
 
     @BeforeEach
     fun createAccessTokenFacade() {
-        this.accessTokenFacade = AccessTokenFacade(logger, InMemoryAccessTokenRepository(), InMemoryAccessTokenRepository(), ExportService())
+        this.accessTokenFacade = AccessTokenFacade(
+            logger,
+            InMemoryAccessTokenRepository(),
+            InMemoryAccessTokenRepository(),
+            ExportService()
+        )
     }
 
     fun createToken(name: String): CreateAccessTokenResponse =

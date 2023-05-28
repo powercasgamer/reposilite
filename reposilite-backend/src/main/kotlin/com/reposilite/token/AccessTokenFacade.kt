@@ -45,7 +45,11 @@ class AccessTokenFacade internal constructor(
     fun createAccessToken(request: CreateAccessTokenRequest): CreateAccessTokenResponse {
         val secret = request.secret ?: generateSecret()
         val encodedSecret = secret.letIf(request.secretType == RAW) { AccessTokenSecurityProvider.encodeSecret(it) }
-        val accessToken = AccessToken(identifier = AccessTokenIdentifier(type = request.type), name = request.name, encryptedSecret = encodedSecret)
+        val accessToken = AccessToken(
+            identifier = AccessTokenIdentifier(type = request.type),
+            name = request.name,
+            encryptedSecret = encodedSecret
+        )
 
         return request.type.getRepository()
             .also { getAccessToken(accessToken.name)?.run { it.deleteAccessToken(this.identifier) } }

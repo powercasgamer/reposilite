@@ -34,7 +34,9 @@ internal class InMemoryAccessTokenRepository : AccessTokenRepository {
 
     override fun saveAccessToken(accessToken: AccessToken): AccessToken {
         val initializedAccessToken = when (accessToken.identifier.value) {
-            UNINITIALIZED_ENTITY_ID -> accessToken.copy(identifier = AccessTokenIdentifier(type = TEMPORARY, value = id.incrementAndGet()))
+            UNINITIALIZED_ENTITY_ID -> accessToken.copy(
+                identifier = AccessTokenIdentifier(type = TEMPORARY, value = id.incrementAndGet())
+            )
             else -> accessToken
         }
 

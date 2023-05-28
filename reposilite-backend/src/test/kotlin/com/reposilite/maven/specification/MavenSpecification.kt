@@ -89,26 +89,28 @@ internal abstract class MavenSpecification {
     fun initializeFacade() {
         val remoteClientProvider = FakeRemoteClientProvider(
             headHandler = { uri, credentials, _, _ ->
-                if (uri.startsWith(REMOTE_REPOSITORY) && REMOTE_AUTH == credentials && !uri.isAllowed())
+                if (uri.startsWith(REMOTE_REPOSITORY) && REMOTE_AUTH == credentials && !uri.isAllowed()) {
                     DocumentInfo(
                         name = uri.toLocation().getSimpleName(),
                         contentType = TEXT_XML,
                     ).asSuccess()
-                else if (uri.startsWith(REMOTE_REPOSITORY_WITH_WHITELIST) && uri.isAllowed())
+                } else if (uri.startsWith(REMOTE_REPOSITORY_WITH_WHITELIST) && uri.isAllowed()) {
                     DocumentInfo(
                         name = uri.toLocation().getSimpleName(),
                         contentType = TEXT_XML,
                     ).asSuccess()
-                else
+                } else {
                     notFoundError("Not found")
+                }
             },
             getHandler = { uri, credentials, _, _ ->
-                if (uri.startsWith(REMOTE_REPOSITORY) && REMOTE_AUTH == credentials && !uri.isAllowed())
+                if (uri.startsWith(REMOTE_REPOSITORY) && REMOTE_AUTH == credentials && !uri.isAllowed()) {
                     REMOTE_CONTENT.byteInputStream().asSuccess()
-                else if (uri.startsWith(REMOTE_REPOSITORY_WITH_WHITELIST) && uri.isAllowed())
+                } else if (uri.startsWith(REMOTE_REPOSITORY_WITH_WHITELIST) && uri.isAllowed()) {
                     REMOTE_CONTENT.byteInputStream().asSuccess()
-                else
+                } else {
                     notFoundError("Not found")
+                }
             }
         )
 
@@ -120,7 +122,12 @@ internal abstract class MavenSpecification {
             failureFacade = failureFacade,
             storageFacade = StorageFacade(),
             accessTokenFacade = accessTokenFacade,
-            statisticsFacade = StatisticsFacade(logger, Reference.reference(false), DailyDateIntervalProvider.toReference(), InMemoryStatisticsRepository()),
+            statisticsFacade = StatisticsFacade(
+                logger,
+                Reference.reference(false),
+                DailyDateIntervalProvider.toReference(),
+                InMemoryStatisticsRepository()
+            ),
             mavenSettings = reference(MavenSettings(
                 repositories = repositories()
             )),

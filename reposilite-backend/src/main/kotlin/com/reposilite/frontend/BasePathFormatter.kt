@@ -25,7 +25,7 @@ internal object BasePathFormatter {
     fun formatBasePath(originBasePath: String): String =
         originBasePath
             .letIf({ it.isNotEmpty() && !it.startsWith("/") }, { "/$it" })
-            .letIf({ it.isNotEmpty() && !it.endsWith("/")}, { "$it/" })
+            .letIf({ it.isNotEmpty() && !it.endsWith("/") }, { "$it/" })
 
     fun formatAsViteBasePath(path: String): String =
         path

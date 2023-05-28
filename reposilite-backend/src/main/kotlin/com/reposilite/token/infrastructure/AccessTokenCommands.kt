@@ -59,10 +59,15 @@ internal class KeygenCommand(private val accessTokenFacade: AccessTokenFacade) :
     @Parameters(index = "0", paramLabel = "<name>", description = ["Access token name"])
     private lateinit var name: String
 
-    @Parameters(index = "1", paramLabel = "[<permissions>]", defaultValue = "", description = [
-        "Access token permissions, e.g. m, optional. Available permissions",
-        "m - marks token as management token and grants access to all features and paths by default (access_token:manager)"
-    ])
+    @Parameters(
+        index = "1",
+        paramLabel = "[<permissions>]",
+        defaultValue = "",
+        description = [
+            "Access token permissions, e.g. m, optional. Available permissions",
+            "m - marks token as management token and grants access to all features and paths by default (access_token:manager)"
+        ]
+    )
     private lateinit var permissions: String
 
     override fun execute(context: CommandContext) {
@@ -114,7 +119,9 @@ private fun mapPermissions(context: CommandContext, permissions: String): Set<Ac
 
     if (mappedPermissions == null) {
         context.status = FAILED
-        context.append("Unknown permissions '$permissions'. Type 'help token-generate' to display supported permissions")
+        context.append(
+            "Unknown permissions '$permissions'. Type 'help token-generate' to display supported permissions"
+        )
         return null
     }
 

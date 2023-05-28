@@ -28,7 +28,9 @@ class LocationTest {
         assertThat(Location.of("group").resolve("artifact").toString()).isEqualTo("group/artifact")
         assertThat(Location.of("/group").resolve("/artifact").toString()).isEqualTo("group/artifact")
         assertThat(Location.of("/////group/////").resolve("/////artifact/////").toString()).isEqualTo("group/artifact")
-        assertThat(Location.of("\\\\\\group\\\\\\").resolve("\\\\\\artifact\\\\\\").toString()).isEqualTo("group/artifact")
+        assertThat(Location.of("\\\\\\group\\\\\\").resolve("\\\\\\artifact\\\\\\").toString()).isEqualTo(
+            "group/artifact"
+        )
         assertThat(Location.of("시험").resolve("기준").toString()).isEqualTo("시험/기준")
     }
 

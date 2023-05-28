@@ -43,7 +43,10 @@ internal object LocalConfigurationFactory {
      */
     private fun loadCustomPropertiesViaReflections(journalist: Journalist?, localConfiguration: LocalConfiguration) {
         (getEnvironmentVariables() + getProperties()).forEach { (key, value) ->
-            val property = localConfiguration::class.declaredMemberProperties.find { it.name.equals(key, ignoreCase = true) } ?: run {
+            val property = localConfiguration::class.declaredMemberProperties.find { it.name.equals(
+                key,
+                ignoreCase = true
+            ) } ?: run {
                 journalist?.logger?.warn("Unknown local configuration property: $key")
                 return@forEach
             }
@@ -55,10 +58,14 @@ internal object LocalConfigurationFactory {
                 Boolean::class -> ReferenceUtils.setValue(reference, value.toBoolean())
                 Int::class -> ReferenceUtils.setValue(reference, value.toInt())
                 String::class -> ReferenceUtils.setValue(reference, value)
-                else -> throw IllegalArgumentException("Unsupported local configuration property type: $key (expected: ${reference.type})")
+                else -> throw IllegalArgumentException(
+                    "Unsupported local configuration property type: $key (expected: ${reference.type})"
+                )
             }
 
-            journalist?.logger?.info("Local configuration has been updated by external property: $key=${value.take(1)}***${value.takeLast(1)}")
+            journalist?.logger?.info(
+                "Local configuration has been updated by external property: $key=${value.take(1)}***${value.takeLast(1)}"
+            )
         }
     }
 

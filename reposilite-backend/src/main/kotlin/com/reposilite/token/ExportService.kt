@@ -75,7 +75,9 @@ internal class ImportTokensCommand(val workingDirectory: Path, val accessTokenFa
                 it.printStackTrace()
             }
             .orNull()
-            ?.also { context.append("Importing ${it.size} token(s) from ${workingDirectory.resolve(name).absolute()} file:") }
+            ?.also { context.append(
+                "Importing ${it.size} token(s) from ${workingDirectory.resolve(name).absolute()} file:"
+            ) }
             ?.map { accessTokenFacade.addAccessToken(it) }
             ?.forEach { context.append("Access token '${it.name}' has been imported.") }
     }

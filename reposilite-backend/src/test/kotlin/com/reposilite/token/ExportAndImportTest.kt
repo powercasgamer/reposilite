@@ -44,7 +44,9 @@ internal class ExportAndImportTest : AccessTokenSpecification() {
         assertThat(context.status).isEqualTo(SUCCEEDED)
 
         tokens.forEach {
-            val token = accessTokenFacade.getAccessTokenDetailsById(accessTokenFacade.getAccessToken(it.accessToken.name)!!.identifier)!!
+            val token = accessTokenFacade.getAccessTokenDetailsById(
+                accessTokenFacade.getAccessToken(it.accessToken.name)!!.identifier
+            )!!
             assertThat(token.accessToken.copy(identifier = it.accessToken.identifier)).isEqualTo(it.accessToken)
             assertThat(token.permissions).isEqualTo(it.permissions)
             assertThat(token.routes).isEqualTo(it.routes)

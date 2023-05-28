@@ -213,7 +213,10 @@ internal object JavalinConfiguration {
                 sslConfig.securePort = localConfiguration.sslPort.get()
 
                 val keyConfiguration = localConfiguration.keyPath.map {
-                    it.replace("\${WORKING_DIRECTORY}", reposilite.parameters.workingDirectory.toAbsolutePath().toString())
+                    it.replace(
+                        "\${WORKING_DIRECTORY}",
+                        reposilite.parameters.workingDirectory.toAbsolutePath().toString()
+                    )
                 }
                 val keyPassword = localConfiguration.keyPassword.get()
 

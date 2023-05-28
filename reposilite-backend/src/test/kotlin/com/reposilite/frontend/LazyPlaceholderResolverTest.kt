@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream
 class LazyPlaceholderResolverTest {
 
     private val bufferSize = 8192
-    private val placeholder =  "{{PLACEHOLDER}}"
+    private val placeholder = "{{PLACEHOLDER}}"
     private val defaultResolver = LazyPlaceholderResolver(mapOf(placeholder to "Reposilite"))
 
     @Test

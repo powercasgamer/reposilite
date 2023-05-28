@@ -38,10 +38,12 @@ open class NamedThreadFactory(private val prefix: String) : ThreadFactory {
 
 fun newFixedThreadPool(min: Int, max: Int, prefix: String): ExecutorService =
     when (LoomExtensions.isLoomAvailable()) {
-        true -> ConcurrencyUtil.executorService("$prefix (virtual) - ");
+        true -> ConcurrencyUtil.executorService("$prefix (virtual) - ")
         false -> ThreadPoolExecutor(
-            min, max,
-            0L, MILLISECONDS,
+            min,
+            max,
+            0L,
+            MILLISECONDS,
             LinkedBlockingQueue(),
             NamedThreadFactory("$prefix ($max) - ")
         )

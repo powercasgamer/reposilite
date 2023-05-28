@@ -62,8 +62,7 @@ class ReposiliteRoute<R>(
         path = path,
         methods = methods
             .map { Route.valueOf(it.name) }
-            .toTypedArray()
-        ,
+            .toTypedArray(),
         handler = handler
     )
 

@@ -69,7 +69,11 @@ internal class SqlStatisticsRepository(
         val date = date("date")
         val count = long("count")
 
-        val uniqueIdentifierIdWithDate = withUnique("uq_statistics_resolved_identifier_identifier_id_date", identifierId, date)
+        val uniqueIdentifierIdWithDate = withUnique(
+            "uq_statistics_resolved_identifier_identifier_id_date",
+            identifierId,
+            date
+        )
     }
 
     init {
@@ -88,14 +92,20 @@ internal class SqlStatisticsRepository(
 
                 when (val dialect = db.vendor) {
                     "postgresql" -> {
-                        connection.executeQuery("ALTER TABLE statistics_identifier ALTER COLUMN repository TYPE VARCHAR($REPOSITORY_NAME_MAX_LENGTH);")
+                        connection.executeQuery(
+                            "ALTER TABLE statistics_identifier ALTER COLUMN repository TYPE VARCHAR($REPOSITORY_NAME_MAX_LENGTH);"
+                        )
                     }
                     "mysql", "mariadb", "h2" -> {
-                        connection.executeQuery("ALTER TABLE statistics_identifier MODIFY repository VARCHAR($REPOSITORY_NAME_MAX_LENGTH);")
+                        connection.executeQuery(
+                            "ALTER TABLE statistics_identifier MODIFY repository VARCHAR($REPOSITORY_NAME_MAX_LENGTH);"
+                        )
                     }
                     "sqlite" -> {
                         connection.executeQuery("PRAGMA writable_schema = 1;")
-                        connection.executeQuery("UPDATE SQLITE_MASTER SET SQL = replace(sql, 'repository VARCHAR(32)', 'repository VARCHAR($REPOSITORY_NAME_MAX_LENGTH)') WHERE name='statistics_identifier' AND type='table';")
+                        connection.executeQuery(
+                            "UPDATE SQLITE_MASTER SET SQL = replace(sql, 'repository VARCHAR(32)', 'repository VARCHAR($REPOSITORY_NAME_MAX_LENGTH)') WHERE name='statistics_identifier' AND type='table';"
+                        )
                         connection.executeQuery("PRAGMA writable_schema = 0;")
                     }
 
@@ -110,7 +120,9 @@ internal class SqlStatisticsRepository(
                 .select { IdentifierTable.gav like "%.module" }
                 .map { it[ResolvedTable.identifierId] }
                 .takeIf { it.isNotEmpty() }
-                ?.also { journalist.logger.info("SqlStatisticsRepository | ${it.size} '%.module' entries will be removed from database") }
+                ?.also { journalist.logger.info(
+                    "SqlStatisticsRepository | ${it.size} '%.module' entries will be removed from database"
+                ) }
                 ?.forEach { id -> ResolvedTable.deleteWhere { ResolvedTable.identifierId eq id } }
         }
     }
@@ -118,7 +130,8 @@ internal class SqlStatisticsRepository(
     override fun incrementResolvedRequests(requests: Map<Identifier, Long>, date: LocalDate) =
         transaction(database) {
             requests.forEach { (identifier, count) ->
-                ResolvedTable.upsert(conflictIndex = ResolvedTable.uniqueIdentifierIdWithDate,
+                ResolvedTable.upsert(
+                    conflictIndex = ResolvedTable.uniqueIdentifierIdWithDate,
                     insertBody = {
                         it[ResolvedTable.identifierId] = findOrCreateIdentifierId(identifier)
                         it[ResolvedTable.date] = date
@@ -156,10 +169,16 @@ internal class SqlStatisticsRepository(
         transaction(database) {
             val resolvedSum = ResolvedTable.count.sum()
             val whereCriteria =
-                if (repository.isEmpty())
+                if (repository.isEmpty()) {
                     IdentifierTable.gav like "%$phrase%"
-                else
-                    AndOp(listOf(Op.build { IdentifierTable.repository eq repository }, Op.build { IdentifierTable.gav like "%$phrase%" }))
+                } else {
+                    AndOp(
+                        listOf(
+                            Op.build { IdentifierTable.repository eq repository },
+                            Op.build { IdentifierTable.gav like "%$phrase%" }
+                        )
+                    )
+                }
 
             IdentifierTable.leftJoin(ResolvedTable, { IdentifierTable.id }, { ResolvedTable.identifierId })
                 .slice(IdentifierTable.gav, resolvedSum)
@@ -178,7 +197,7 @@ internal class SqlStatisticsRepository(
 
             ResolvedTable.leftJoin(IdentifierTable, { ResolvedTable.identifierId }, { IdentifierTable.id })
                 .slice(IdentifierTable.repository, ResolvedTable.date, ResolvedTable.count.sum())
-                .select { ResolvedTable.date greaterEq start  }
+                .select { ResolvedTable.date greaterEq start }
                 .groupBy(IdentifierTable.repository, ResolvedTable.date)
                 .asSequence()
                 .map { Triple(it[IdentifierTable.repository], it[ResolvedTable.date], it[ResolvedTable.count.sum()]) }
@@ -203,7 +222,7 @@ internal class SqlStatisticsRepository(
                     .selectAll()
                     .firstAndMap { it[this] }
             }
-            ?: 0
+                ?: 0
         }
 
 }

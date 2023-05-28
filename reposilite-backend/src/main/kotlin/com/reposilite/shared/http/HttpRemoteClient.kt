@@ -99,11 +99,17 @@ class HttpRemoteClient(private val journalist: Journalist, proxy: Proxy?) : Remo
     private fun <R> HttpRequest.execute(consumer: (HttpResponse) -> Result<R, ErrorResponse>): Result<R, ErrorResponse> =
         try {
             val response = this.execute()
-            logger.debug("HttpRemoteClient | $url responded with ${response.statusCode} (Content-Type: ${response.contentType})")
+            logger.debug(
+                "HttpRemoteClient | $url responded with ${response.statusCode} (Content-Type: ${response.contentType})"
+            )
 
             when {
-                response.contentType == ContentType.HTML -> NOT_ACCEPTABLE.toErrorResult("Illegal file type (${response.contentType})")
-                response.isSuccessStatusCode.not() -> NOT_ACCEPTABLE.toErrorResult("Unsuccessful request (${response.statusCode})")
+                response.contentType == ContentType.HTML -> NOT_ACCEPTABLE.toErrorResult(
+                    "Illegal file type (${response.contentType})"
+                )
+                response.isSuccessStatusCode.not() -> NOT_ACCEPTABLE.toErrorResult(
+                    "Unsuccessful request (${response.statusCode})"
+                )
                 else -> consumer(response)
             }.onError {
                 response.disconnect()

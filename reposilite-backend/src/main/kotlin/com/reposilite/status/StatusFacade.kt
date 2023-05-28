@@ -48,7 +48,9 @@ class StatusFacade(
                 IOUtils.fetchContent(remoteVersionUrl)
                     .onError {
                         when (it.message?.contains("java.security.NoSuchAlgorithmException")) {
-                            true -> failureFacade.logger.warn("Cannot load SSL context for HTTPS request due to the lack of available memory")
+                            true -> failureFacade.logger.warn(
+                                "Cannot load SSL context for HTTPS request due to the lack of available memory"
+                            )
                             else -> failureFacade.logger.warn("$remoteVersionUrl is unavailable: ${it.message}")
                         }
                     }

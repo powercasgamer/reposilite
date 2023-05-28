@@ -103,10 +103,18 @@ class SettingsModule(
             enumResolvers.firstNotNullOfOrNull { resolver -> resolver.resolve(it) }
         }
 
-        builder.forFields().withNumberInclusiveMinimumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(Min::class.java)?.min?.toBigDecimal() }
-        builder.forFields().withNumberInclusiveMaximumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(Max::class.java)?.max?.toBigDecimal() }
-        builder.forFields().withNumberInclusiveMinimumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(Range::class.java)?.min?.toBigDecimal() }
-        builder.forFields().withNumberInclusiveMaximumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(Range::class.java)?.max?.toBigDecimal() }
+        builder.forFields().withNumberInclusiveMinimumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(
+            Min::class.java
+        )?.min?.toBigDecimal() }
+        builder.forFields().withNumberInclusiveMaximumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(
+            Max::class.java
+        )?.max?.toBigDecimal() }
+        builder.forFields().withNumberInclusiveMinimumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(
+            Range::class.java
+        )?.min?.toBigDecimal() }
+        builder.forFields().withNumberInclusiveMaximumResolver { it.getAnnotationConsideringFieldAndGetterIfSupported(
+            Range::class.java
+        )?.max?.toBigDecimal() }
 
         builder.forFields().withTitleResolver { it.doc?.title }
         builder.forMethods().withTitleResolver { it.doc?.title }
@@ -168,10 +176,18 @@ class SettingsModule(
 internal fun cleanupScheme(node: JsonNode) {
     when (node) {
         is ObjectNode -> {
-            if (node.has("items") && node.get("items").isObject && node.get("items").has("allOf") && node.get("items").get("allOf").isArray && node.get("items").get("allOf").size() == 2) {
+            if (node.has("items") && node.get("items").isObject && node.get("items").has("allOf") && node.get("items").get(
+                    "allOf"
+                ).isArray && node.get("items").get("allOf").size() == 2) {
                 when {
-                    !node.get("items").get("allOf").get(1).has("type") -> node.set<JsonNode>("items", node.get("items").get("allOf").get(0))
-                    !node.get("items").get("allOf").get(0).has("type") -> node.set<JsonNode>("items", node.get("items").get("allOf").get(1))
+                    !node.get("items").get("allOf").get(1).has("type") -> node.set<JsonNode>(
+                        "items",
+                        node.get("items").get("allOf").get(0)
+                    )
+                    !node.get("items").get("allOf").get(0).has("type") -> node.set<JsonNode>(
+                        "items",
+                        node.get("items").get("allOf").get(1)
+                    )
                 }
             }
             node.fields().forEach {

@@ -52,7 +52,9 @@ class SharedConfigurationFacade(
                     schema = knownSchemes[type.name]
                         ?.let { Supplier { it.getContent() } }
                         ?: run {
-                            journalist.logger.warn("[SharedConfigurationFacade] Cannot find scheme for $type, scheme has to be generated at runtime")
+                            journalist.logger.warn(
+                                "[SharedConfigurationFacade] Cannot find scheme for $type, scheme has to be generated at runtime"
+                            )
                             val scheme = schemaGenerator.value.generateSchema(type).also { cleanupScheme(it) }.toPrettyString()
                             Supplier { scheme.byteInputStream() }
                         },
@@ -71,7 +73,11 @@ class SharedConfigurationFacade(
 
     open class SharedSettingsUpdateException(
         val errors: Collection<Pair<SharedSettingsReference<*>, Exception>>
-    ) : IllegalStateException("Cannot load shared configuration from file (${errors.size} errors):\n${errors.joinToString(System.lineSeparator())}")
+    ) : IllegalStateException(
+        "Cannot load shared configuration from file (${errors.size} errors):\n${errors.joinToString(
+            System.lineSeparator()
+        )}"
+    )
 
     fun fetchConfiguration(): String =
         sharedConfigurationProvider.fetchConfiguration()

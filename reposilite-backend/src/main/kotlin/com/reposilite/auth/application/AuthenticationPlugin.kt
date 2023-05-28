@@ -26,7 +26,11 @@ import com.reposilite.plugin.event
 import com.reposilite.plugin.facade
 import com.reposilite.web.api.RoutingSetupEvent
 
-@Plugin(name = "authentication", dependencies = ["failure", "shared-configuration", "access-token"], settings = AuthenticationSettings::class)
+@Plugin(
+    name = "authentication",
+    dependencies = ["failure", "shared-configuration", "access-token"],
+    settings = AuthenticationSettings::class
+)
 class AuthenticationPlugin : ReposilitePlugin() {
 
     override fun initialize(): Facade {

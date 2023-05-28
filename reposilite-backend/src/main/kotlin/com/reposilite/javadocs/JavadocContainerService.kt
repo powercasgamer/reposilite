@@ -42,7 +42,12 @@ internal class JavadocContainerService(
 
         return mavenFacade.findDetails(LookupRequest(accessToken, repository.name, javadocJar))
             .filter({ it.type === FILE }, { badRequest("Invalid request") })
-            .filter({ isJavadocJar(it.name) }, { notFound("Please do not provide a direct link to a non javadoc file! GAV must be pointing to a directory or a javadoc file!") })
+            .filter(
+                { isJavadocJar(it.name) },
+                { notFound(
+                    "Please do not provide a direct link to a non javadoc file! GAV must be pointing to a directory or a javadoc file!"
+                ) }
+            )
             .flatMap { loadJavadocJarContainer(accessToken, repository, javadocJar) }
     }
 
@@ -72,7 +77,7 @@ internal class JavadocContainerService(
             }
         }
 
-        return rootGav.resolve("${name}-${version}-javadoc.jar")
+        return rootGav.resolve("$name-$version-javadoc.jar")
     }
 
     private fun loadJavadocJarContainer(accessToken: AccessTokenIdentifier?, repository: Repository, gav: Location): Result<JavadocContainer, ErrorResponse> {
@@ -113,7 +118,9 @@ internal class JavadocContainerService(
 
     private fun unpackJavadocJar(jarPath: Path, javadocUnpackPath: Path): Result<Unit, ErrorResponse> =
         when {
-            !jarPath.getSimpleName().contains("javadoc.jar") -> badRequestError("Invalid javadoc jar! Name must contain: 'javadoc.jar'")
+            !jarPath.getSimpleName().contains("javadoc.jar") -> badRequestError(
+                "Invalid javadoc jar! Name must contain: 'javadoc.jar'"
+            )
             Files.isDirectory(jarPath) -> badRequestError("JavaDoc jar path has to be a file!")
             !Files.isDirectory(javadocUnpackPath) -> badRequestError("Destination must be a directory!")
 
@@ -139,7 +146,10 @@ internal class JavadocContainerService(
         }
 
     private fun createDocIndexHtml(container: JavadocContainer) {
-        Files.write(container.javadocContainerIndex, JavadocView.index("/.cache/unpack/index.html").toByteArray(Charsets.UTF_8))
+        Files.write(
+            container.javadocContainerIndex,
+            JavadocView.index("/.cache/unpack/index.html").toByteArray(Charsets.UTF_8)
+        )
     }
 
     private fun isJavadocJar(path: String) =

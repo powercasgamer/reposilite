@@ -35,7 +35,11 @@ internal class AuthenticationEndpoint(private val authenticationFacade: Authenti
         summary = "Get token details",
         description = "Returns details about the requested token",
         tags = [ "Auth" ],
-        headers = [ OpenApiParam(name = "Authorization", description = "Name and secret provided as basic auth credentials", required = true) ],
+        headers = [ OpenApiParam(
+            name = "Authorization",
+            description = "Name and secret provided as basic auth credentials",
+            required = true
+        ) ],
         responses = [
             OpenApiResponse(
                 status = "200",

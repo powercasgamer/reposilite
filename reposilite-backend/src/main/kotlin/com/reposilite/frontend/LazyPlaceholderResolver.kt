@@ -119,7 +119,9 @@ internal class LazyPlaceholderResolver(private val placeholders: Map<String, Str
         placeholders.keys.forEach { placeholder ->
             placeholder.forEach {
                 if (it.code > Byte.MAX_VALUE) {
-                    throw UnsupportedOperationException("LazyPlaceholderResolve supports only basic placeholders from 1-byte long symbols")
+                    throw UnsupportedOperationException(
+                        "LazyPlaceholderResolve supports only basic placeholders from 1-byte long symbols"
+                    )
                 }
             }
         }
